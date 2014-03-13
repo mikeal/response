@@ -1,6 +1,6 @@
 {
   "name": "response",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Streaming and mutation API for HTTP responses.",
   "main": "index.js",
   "directories": {
