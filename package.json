@@ -1,0 +1,35 @@
+{
+  "name": "response",
+  "version": "0.9.0",
+  "description": "Streaming and mutation API for HTTP responses.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "mime": "~1.2.11",
+    "bl": "~0.7.0"
+  },
+  "devDependencies": {
+    "request": "~2.34.0",
+    "tape": "~2.10.2"
+  },
+  "scripts": {
+    "test": "tape tests/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikeal/response"
+  },
+  "keywords": [
+    "http",
+    "response",
+    "request"
+  ],
+  "author": "Mikeal Rogers <mikeal.rogers@gmail.com>",
+  "license": "Apache2",
+  "bugs": {
+    "url": "https://github.com/mikeal/response/issues"
+  },
+  "homepage": "https://github.com/mikeal/response"
+}
