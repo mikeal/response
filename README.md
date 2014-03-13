@@ -10,7 +10,7 @@ The whole package is still beta.
 
 ```javascript
 var server = http.createServer(function (req, res) {
-  if (req.url === '/test.js') return f('test-files.js').pipe(response()).pipe(res)
+  if (req.url === '/test.js') return fs.createReadStream('file.js').pipe(response()).pipe(res)
 })
 ```
 
