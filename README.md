@@ -1,10 +1,10 @@
-# Response
+## Response
 
 The basic idea is to build [request](https://github.com/mikeal/request) for HTTP Responses.
 
 This whole package is still beta.
 
-## files
+### files
 
 ```javascript
 var server = http.createServer(function (req, res) {
@@ -15,7 +15,7 @@ var server = http.createServer(function (req, res) {
 
 When pipeing files to `response` it will lookup the mime type and set the propert content-type header for whatever file extension you send it.
 
-## html, json, txt
+### html, json, txt
 
 ```javascript
 var server = http.createServer(function (req, res) {
@@ -43,7 +43,7 @@ r.error(555).pipe(res)
 r.error(new Error('Uh Oh!'), 501).pipe(res)
 ```
 
-In addition, errors on the stream piped to `response` will be passed through the same API and are accesssible in `views`.
+In addition, errors emitted on the stream piped to `response` will be passed through the same API and are accesssible in `views`.
 
 ## gzip and deflate compression
 
@@ -114,7 +114,7 @@ Check if a header is already set. If one is set the header key will be returned 
 r.hasHeader('content-type')
 ```
 
-## views (very experimental)
+### views (very experimental)
 
 ```javascript
 function view (e, data, cb) {
