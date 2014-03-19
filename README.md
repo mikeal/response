@@ -4,8 +4,6 @@ The basic idea is to build [request](https://github.com/mikeal/request) for HTTP
 
 This whole package is still beta.
 
-# Usage
-
 ## Files
 
 ```javascript
@@ -31,7 +29,7 @@ var server = http.createServer(function (req, res) {
 
 ## gzip and deflate compression
 
-The second argument to every response function is an optional options object. The `compress` and `gzip` keys are used for compression.
+The `compress` and `gzip` keys in an options object are used for compression.
 
 ```javascript
 var server = http.createServer(function (req, res) {
@@ -42,7 +40,13 @@ var server = http.createServer(function (req, res) {
 
 You can pass an HTTP Request object and the best compression, if any, will be chosen for you. Alternatively you can pass `"gzip"` or `"deflate"` to forcce compression of the response stream.
 
-This compression option is compatible with every other feature in `response` and will work whether you do file streaming, html, json, or even using views.
+This compression option is compatible with every other feature in `response` and will work whether you do file streaming, html, json, or even using views. When passing a view, string or buffer to `response` the second argument is used as the options object.
+
+```javascript
+var server = http.createServer(function (req, res) {
+  if (req.url === '/') return response.html('<html>Nope</html>', {compress:req}).pipe(res)
+})
+```
 
 ## views (very experimental)
 
