@@ -158,6 +158,11 @@ response.json = function (view, opts) {
   r.setHeader('content-type', mime.types['json'])
   return r
 }
+response.error = function () {
+  var r = response()
+  r.error.apply(r, arguments)
+  return r
+}
 
 // TODO alias express methods
 // .status
