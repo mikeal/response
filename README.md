@@ -29,6 +29,22 @@ var server = http.createServer(function (req, res) {
 })
 ```
 
+### .error(err[, statusCode])
+
+```javascript
+r.error(new Error('Uh Oh!')).pipe(res)
+```
+
+```javascript
+r.error(555).pipe(res)
+```
+
+```javascript
+r.error(new Error('Uh Oh!'), 501).pipe(res)
+```
+
+In addition, errors on the stream piped to `response` will be passed through the same API and are accesssible in `views`.
+
 ## gzip and deflate compression
 
 The `compress` and `gzip` keys in an options object are used for compression.

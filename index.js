@@ -91,6 +91,13 @@ Response.prototype._pipe = function () {
 }
 Response.prototype.error = function (e, status) {
   var self = this
+
+  if (!status && typeof e === 'number') {
+    self.statusCode = e
+    self.end()
+    return
+  }
+
   self.statusCode = status || 500
   if (self._erroring) return
   self._erroring = true
@@ -160,6 +167,6 @@ response.json = function (view, opts) {
 // .jsonp
 
 // TODO redirect api
-
+// TODO error, notfound
 
 module.exports = response
