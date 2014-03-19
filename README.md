@@ -21,7 +21,7 @@ var server = http.createServer(function (req, res) {
   if (req.url === '/') return response.html('<html>Hello World</html>').pipe(res)
   if (req.url === '/sitemap.html') {
     var f = fs.createReadStream('sitemap')
-    return r.pipe(response.html()).pipe(res)
+    return f.pipe(response.html()).pipe(res)
   }
   if (req.url === '/something.json') return response.json({test:1}).pipe(res)
 })
