@@ -2,21 +2,30 @@ var stream = require('stream')
   , mime = require('mime')
   , util = require('util')
   , bl = require('bl')
+  , caseless = require('caseless')
+  , bestencoding = require('best-encoding')
+  , zlib = require('zlib')
   ;
 
+// This could eventually be its own module.
 function mutations (src, dest) {
   if (src.headers && dest.setHeader) {
     for (var i in src.headers) dest.setHeader(i, src.headers[i])
   }
-  if (src.path && (!src.headers || !src.headers['content-type']) && dest.setHeader) {
-    console.log(mime.lookup(src.path))
+  if (src.path && (!src.headers || (src.getHeader ? !src.getHeader('content-type') : !src.headers['content-type'])) && dest.setHeader) {
     dest.setHeader('content-type', mime.lookup(src.path))
   }
   if (src.statusCode) dest.statusCode = src.statusCode
 }
 
-function Response (view) {
+function Response (view, opts) {
   var self = this
+  if (typeof view !== 'string' && typeof view !== 'function' && !Buffer.isBuffer(view)) {
+    opts = view
+    view = null
+  }
+  self.opts = opts || {}
+  if (self.opts.gzip) self.opts.compress = gzip
   self.view = view
   self.buffering = bl()
   self.headers = {}
@@ -37,6 +46,26 @@ function Response (view) {
       })
     }
   }
+  caseless.httpify(this, this.headers)
+  if (self.opts.compress) {
+    var encoding
+    if (self.opts.compress.headers) {
+      encoding = bestencoding(self.opts.compress)
+    } else if (typeof self.opts.compress === 'string') {
+      encoding = self.opts.compress
+    } else {
+      encoding = 'gzip'
+    }
+
+    if (encoding && encoding !== 'identity') {
+      if (encoding !== 'gzip' && encoding !== 'deflate') throw new Error("I don't know this encoding.")
+      self.statusCode = 200
+      self.setHeader('content-encoding', encoding)
+      if (encoding === 'gzip') self.compressor = zlib.createGzip()
+      if (encoding === 'deflate') self.compressor = zlib.createDeflate()
+      stream.Transform.prototype.pipe.call(this, self.compressor)
+    }
+  }
 }
 util.inherits(Response, stream.Transform)
 
@@ -51,19 +80,14 @@ Response.prototype._transform = function (chunk, encoding, cb) {
 }
 Response.prototype.pipe = function () {
   this.dests.push(arguments[0])
-  // if (!arguments[1]) arguments[1] = {}
-  // arguments[1].end = false
-  stream.Transform.prototype.pipe.apply(this, arguments)
+  if (this.compressor) this.compressor.pipe.apply(this.compressor, arguments)
+  else stream.Transform.prototype.pipe.apply(this, arguments)
 }
 Response.prototype._pipe = function () {
   var self = this
   this.dests.forEach(function (dest) {
     mutations(self, dest)
   })
-}
-
-Response.prototype.setHeader = function (key, value) {
-  this.headers[key] = value
 }
 Response.prototype.error = function (e, status) {
   var self = this
@@ -87,24 +111,27 @@ Response.prototype.end = function (data) {
   if (typeof self.view === 'function') {
     self.view.call(self, null, self.buffering, function (e, data) {
       if (e) self.error(e)
-      self.dests.forEach(function (dest) {
-        dest.write(data)
-      })
+      if (self.compressor) {
+        self.compressor.write(data)
+      } else {
+        self.dests.forEach(function (dest) {
+          dest.write(data)
+        })
+      }
       stream.Transform.prototype.end.apply(self)
     })
   } else {
     stream.Transform.prototype.end.apply(self)
   }
-
 }
 
-function response (view) {
-  return new Response(view)
+function response (view, opts) {
+  return new Response(view, opts)
 }
 
 Object.keys(mime.types).forEach(function (mimeName) {
-  function _response (view) {
-    var r = response(view)
+  function _response (view, opts) {
+    var r = response(view, opts)
     r.setHeader('content-type', mime.types[mimeName])
     return r
   }
@@ -119,8 +146,8 @@ Object.keys(mime.types).forEach(function (mimeName) {
     return this
   }
 })
-response.json = function (view) {
-  var r = response(JSON.stringify(view))
+response.json = function (view, opts) {
+  var r = response(JSON.stringify(view), opts)
   r.setHeader('content-type', mime.types['json'])
   return r
 }

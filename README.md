@@ -1,8 +1,8 @@
 # Response
 
-The basic idea is to build request for http responses.
+The basic idea is to build [request](https://github.com/mikeal/request) for HTTP Responses.
 
-The whole package is still beta.
+This whole package is still beta.
 
 # Usage
 
@@ -21,9 +21,28 @@ When pipeing files to `response` it will lookup the mime type and set the proper
 ```javascript
 var server = http.createServer(function (req, res) {
   if (req.url === '/') return response.html('<html>Hello World</html>').pipe(res)
-  if (req.url === '/sitemap.html') return fs.createReadStream('sitemap').pipe(response.html()).pipe(res)
+  if (req.url === '/sitemap.html') {
+    var f = fs.createReadStream('sitemap')
+    return r.pipe(response.html()).pipe(res)
+  }
+  if (req.url === '/something.json') return response.json({test:1}).pipe(res)
 })
 ```
+
+## gzip and deflate compression
+
+The second argument to every response function is an optional options object. The `compress` and `gzip` keys are used for compression.
+
+```javascript
+var server = http.createServer(function (req, res) {
+  var f = fs.createReadStream('file.js')
+  if (req.url === '/file.js') return f.pipe(response({compress:req})).pipe(res)
+})
+```
+
+You can pass an HTTP Request object and the best compression, if any, will be chosen for you. Alternatively you can pass `"gzip"` or `"deflate"` to forcce compression of the response stream.
+
+This compression option is compatible with every other feature in `response` and will work whether you do file streaming, html, json, or even using views.
 
 ## views (very experimental)
 
