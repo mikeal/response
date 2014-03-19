@@ -152,4 +152,14 @@ response.json = function (view, opts) {
   return r
 }
 
+// TODO alias express methods
+// .status
+// .location
+// .charset
+// .send
+// .jsonp
+
+// TODO redirect api
+
+
 module.exports = response
