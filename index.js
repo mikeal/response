@@ -13,6 +13,12 @@ function mutations (src, dest) {
     for (var i in src.headers) dest.setHeader(i, src.headers[i])
   }
   if (src.path && (!src.headers || (src.getHeader ? !src.getHeader('content-type') : !src.headers['content-type'])) && dest.setHeader) {
+    src.on('error', function (e) {
+      dest.statusCode = 404
+      dest.setHeader('content-type', 'text/plain')
+      dest.write('Not Found')
+      dest.end()
+    })
     dest.setHeader('content-type', mime.lookup(src.path))
   }
   if (src.statusCode) dest.statusCode = src.statusCode
