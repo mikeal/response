@@ -154,7 +154,7 @@ Object.keys(mime.types).forEach(function (mimeName) {
     var self = this
     self.setHeader('content-type', mime.types[mimeName])
     process.nextTick(function () {
-      self.end(view)
+      self.end(typeof view == 'object' ? JSON.stringify(view) : view)
     })
     return this
   }

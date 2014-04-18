@@ -15,6 +15,11 @@ function fr (name) {
 
 var server = http.createServer(function (req, res) {
   if (req.url === '/test1') return response.json({test:1}).pipe(res)
+  if (req.url === '/test2') {
+    var r = response();
+    r.statusCode = 302;
+    r.json({test:2}).pipe(res)
+  }
 })
 
 server.listen(8082, function () {
@@ -25,6 +30,15 @@ server.listen(8082, function () {
       t.equal(resp.statusCode, 200)
       t.equal(resp.headers['content-type'], 'application/json')
       t.deepEqual(body, {test:1})
+    })
+  })
+  tape.test('basic json status code', function (t) {
+    t.plan(3)
+    request('http://localhost:8082/test2', {json:true}, function (e, resp, body) {
+      if (e) return t.error(e)
+      t.equal(resp.statusCode, 302)
+      t.equal(resp.headers['content-type'], 'application/json')
+      t.deepEqual(body, {test:2})
     })
   })
 
