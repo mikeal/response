@@ -40,6 +40,10 @@ function Response (view, opts) {
     self.statusCode = statusCode;
     return self
   }
+  self.location = function(location) {
+    self.setHeader('Location', location)
+    return self
+  }
   stream.Transform.call(self)
   self.on('pipe', function (src) {
     mutations(src, self)
@@ -183,8 +187,6 @@ response.error = function () {
 }
 
 // TODO alias express methods
-// .status
-// .location
 // .charset
 // .send
 // .jsonp
