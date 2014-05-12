@@ -55,26 +55,26 @@ tape.test('testing new view mapping, convenience functions, and member functions
     t.plan(18)
     q.series([
     function(lib) {
-        server.listen(8082,function(){
+        server.listen(8090,function(){
             lib.done()
         });
     },
     function(lib) {
-        request('http://localhost:8082/test1a', {json:true}, function (e, resp, body) {
+        request('http://localhost:8090/test1a', {json:true}, function (e, resp, body) {
             t.equal(resp.headers['content-type'],'application/json')
             t.deepEqual(body,{test:1});
             lib.done();
         })
     },
     function(lib) {
-        request('http://localhost:8082/test1b', {json:true}, function (e, resp, body) {
+        request('http://localhost:8090/test1b', {json:true}, function (e, resp, body) {
             t.equal(resp.headers['content-type'],'application/json')
             t.deepEqual(body,{test:1});
             lib.done();
         })
     },
     function(lib) {
-        request('http://localhost:8082/test2a', {json:true}, function (e, resp, body) {
+        request('http://localhost:8090/test2a', {json:true}, function (e, resp, body) {
             t.equal(resp.statusCode, 302, 'status code should be 302')
             t.equal(resp.headers['content-type'],'application/json')
             t.deepEqual(body,{test:1});
@@ -82,7 +82,7 @@ tape.test('testing new view mapping, convenience functions, and member functions
         })
     },
     function(lib) {
-        request('http://localhost:8082/test2b', {json:true}, function (e, resp, body) {
+        request('http://localhost:8090/test2b', {json:true}, function (e, resp, body) {
             t.equal(resp.statusCode, 302, 'status code should be 302')
             t.equal(resp.headers['content-type'],'application/json')
             t.deepEqual(body,{test:1});
@@ -90,28 +90,28 @@ tape.test('testing new view mapping, convenience functions, and member functions
         })
     },
     function(lib) {
-        request('http://localhost:8082/test4a', {json:true}, function (e, resp, body) {
+        request('http://localhost:8090/test4a', {json:true}, function (e, resp, body) {
             t.equal(resp.headers['content-type'],'application/json')
             t.equal(body,23423);
             lib.done();
         })
     },
     function(lib) {
-        request('http://localhost:8082/test4b', {json:true}, function (e, resp, body) {
+        request('http://localhost:8090/test4b', {json:true}, function (e, resp, body) {
             t.equal(resp.headers['content-type'],'application/json')
             t.equal(body,23423);
             lib.done();
         })
     },
     function(lib) {
-        request('http://localhost:8082/test6a', {json:true}, function (e, resp, body) {
+        request('http://localhost:8090/test6a', {json:true}, function (e, resp, body) {
             t.equal(resp.headers['content-type'],'text/plain')
             t.equal(body,23423);
             lib.done();
         })
     },
     function(lib) {
-        request('http://localhost:8082/test6b', {json:true}, function (e, resp, body) {
+        request('http://localhost:8090/test6b', {json:true}, function (e, resp, body) {
             t.equal(resp.headers['content-type'],'text/plain')
             t.equal(body,23423);
             lib.done();
@@ -119,9 +119,11 @@ tape.test('testing new view mapping, convenience functions, and member functions
     },
     function(lib) {
         tape.test('cleanup',function(t) {
-            t.end()
+            server.on('close',function() {
+                t.end()
+                lib.done()
+            });
             server.close()
-            lib.done()
         });
     }
     ]);

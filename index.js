@@ -36,14 +36,6 @@ function Response (view, opts) {
   self.buffering = bl()
   self.headers = {}
   self.dests = []
-  self.status = function(statusCode) {
-    self.statusCode = statusCode;
-    return self
-  }
-  self.location = function(location) {
-    self.setHeader('Location', location)
-    return self
-  }
   stream.Transform.call(self)
   self.on('pipe', function (src) {
     mutations(src, self)
@@ -124,6 +116,14 @@ Response.prototype.error = function (e, status) {
     // TODO: Default tracebacks on errors.
   }
 }
+Response.prototype.status = function(statusCode) {
+  this.statusCode = statusCode;
+  return this
+}
+Response.prototype.location = function(location) {
+  this.setHeader('Location', location)
+  return this
+}
 Response.prototype.end = function (data) {
   var a = arguments
     , self = this
@@ -152,10 +152,10 @@ function response (view, opts) {
 
 var typemap = {};
 typemap['txt'] = function(view) {
-    return (typeof view != 'string') ? view.toString() : view
+  return (typeof view != 'string') ? view.toString() : view
 }
 typemap['json'] = function(view) {
-    return JSON.stringify(view)
+  return JSON.stringify(view)
 }
 
 Object.keys(mime.types).forEach(function (mimeName) {
