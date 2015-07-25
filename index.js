@@ -119,6 +119,14 @@ Response.prototype.error = function (e, status) {
     self.end(e.message || 'Error')
   }
 }
+Response.prototype.status = function(statusCode) {
+  this.statusCode = statusCode;
+  return this
+}
+Response.prototype.location = function(location) {
+  this.setHeader('Location', location)
+  return this
+}
 Response.prototype.end = function (data) {
   var a = arguments
     , self = this
@@ -145,28 +153,36 @@ function response (view, opts) {
   return new Response(view, opts)
 }
 
+var typemap = {};
+typemap['txt'] = function(view) {
+  return (typeof view != 'string') ? view.toString() : view
+}
+typemap['json'] = function(view) {
+  return JSON.stringify(view)
+}
+
 Object.keys(mime.types).forEach(function (mimeName) {
+   
+    // set mime convenience methods 
   function _response (view, opts) {
+    view = (typemap[mimeName]) ? typemap[mimeName](view) : view
     var r = response(view, opts)
     r.setHeader('content-type', mime.types[mimeName])
     return r
   }
   response[mimeName] = _response
-
+  // set mime methods
   Response.prototype[mimeName] = function (view) {
+    view = (typemap[mimeName]) ? typemap[mimeName](view) : view
     var self = this
     self.setHeader('content-type', mime.types[mimeName])
     process.nextTick(function () {
-      self.end(view)
+        self.end(view)
     })
     return this
   }
 })
-response.json = function (view, opts) {
-  var r = response(JSON.stringify(view), opts)
-  r.setHeader('content-type', mime.types['json'])
-  return r
-}
+
 response.error = function () {
   var r = response()
   r.error.apply(r, arguments)
@@ -174,8 +190,6 @@ response.error = function () {
 }
 
 // TODO alias express methods
-// .status
-// .location
 // .charset
 // .send
 // .jsonp

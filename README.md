@@ -1,3 +1,15 @@
+## Quick Example
+
+    response.json({result:'error',missing_keys:['email']}).status(400).pipe(res)
+    
+    // headers are { 'content-type': 'application/json',
+    // date: 'Mon, 12 May 2014 12:57:31 GMT',
+    // connection: 'keep-alive',
+    // 'transfer-encoding': 'chunked' } 
+    // statusCode is 400 
+    // body is { result: 'error', missing_keys: [ 'email' ] }
+ 
+
 ## Response
 
 The basic idea is to build [request](https://github.com/mikeal/request) for HTTP Responses.

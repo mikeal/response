@@ -13,6 +13,7 @@
     "best-encoding": "^0.1.1"
   },
   "devDependencies": {
+    "queuelib": "^0.3.6",
     "request": "~2.34.0",
     "tape": "~2.10.2"
   },
