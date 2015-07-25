@@ -12,7 +12,9 @@ function mutations (src, dest) {
   if (src.headers && dest.setHeader) {
     for (var i in src.headers) dest.setHeader(i, src.headers[i])
   }
-  if (src.path && (!src.headers || (src.getHeader ? !src.getHeader('content-type') : !src.headers['content-type'])) && dest.setHeader) {
+  if (src.path &&
+      (!src.headers || (src.getHeader ? !src.getHeader('content-type') : !src.headers['content-type'])) &&
+      dest.setHeader) {
     src.on('error', function (e) {
       dest.statusCode = 404
       dest.setHeader('content-type', 'text/plain')
