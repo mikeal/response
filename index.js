@@ -116,6 +116,7 @@ Response.prototype.error = function (e, status) {
     })
   } else {
     // TODO: Default tracebacks on errors.
+    self.end(e.message || 'Error')
   }
 }
 Response.prototype.end = function (data) {
