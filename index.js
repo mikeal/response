@@ -116,7 +116,7 @@ Response.prototype.error = function (e, status) {
     })
   } else {
     // TODO: Default tracebacks on errors.
-    self.end(e.message || 'Error')
+    self.end( e ? e.message || 'Error' : 'Error')
   }
 }
 Response.prototype.status = function(statusCode) {
@@ -162,8 +162,8 @@ typemap['json'] = function(view) {
 }
 
 Object.keys(mime.types).forEach(function (mimeName) {
-   
-    // set mime convenience methods 
+
+    // set mime convenience methods
   function _response (view, opts) {
     view = (typemap[mimeName]) ? typemap[mimeName](view) : view
     var r = response(view, opts)
