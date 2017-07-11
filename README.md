@@ -1,5 +1,7 @@
 ## Quick Example
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mikeal/response.svg)](https://greenkeeper.io/)
+
     response.json({result:'error',missing_keys:['email']}).status(400).pipe(res)
     
     // headers are { 'content-type': 'application/json',
