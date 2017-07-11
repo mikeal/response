@@ -7,15 +7,15 @@
     "test": "tests"
   },
   "dependencies": {
-    "mime": "~1.2.11",
-    "bl": "~0.7.0",
-    "caseless": "^0.3.0",
+    "mime": "~1.3.6",
+    "bl": "~1.2.1",
+    "caseless": "^0.12.0",
     "best-encoding": "^0.1.1"
   },
   "devDependencies": {
-    "queuelib": "^0.3.6",
-    "request": "~2.34.0",
-    "tape": "~2.10.2"
+    "queuelib": "^2.0.1",
+    "request": "~2.81.0",
+    "tape": "~4.7.0"
   },
   "scripts": {
     "test": "tape tests/*.js"
