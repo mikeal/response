@@ -1,13 +1,13 @@
 {
   "name": "response",
-  "version": "0.18.1",
+  "version": "0.18.2",
   "description": "Streaming and mutation API for HTTP responses.",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "dependencies": {
-    "mime": "~1.2.11",
+    "mime": "~1.4.1",
     "bl": "~0.7.0",
     "caseless": "^0.3.0",
     "best-encoding": "^0.1.1"
