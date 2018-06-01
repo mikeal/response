@@ -26,12 +26,12 @@ tape.test('testing new view mapping, convenience functions, and member functions
     t.plan(2)
     q.series([
     function(lib) {
-        server.listen(8082,function(){
+        server.listen(8084,function(){
             lib.done()
         });
     },
     function(lib) {
-        request('http://localhost:8082/', {json:true}, function (e, resp, body) {
+        request('http://localhost:8084/', {json:true}, function (e, resp, body) {
             t.equal(resp.headers['content-type'],'text/plain')
             t.equal(body,'bar')
             lib.done();

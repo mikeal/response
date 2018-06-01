@@ -1,21 +1,22 @@
 {
   "name": "response",
-  "version": "0.18.1",
+  "version": "0.18.2",
   "description": "Streaming and mutation API for HTTP responses.",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "dependencies": {
-    "mime": "~1.4.1",
-    "bl": "~0.7.0",
-    "caseless": "^0.3.0",
-    "best-encoding": "^0.1.1"
+    "best-encoding": "^0.1.1",
+    "bl": "~2.0.0",
+    "caseless": "^0.12.0",
+    "mime": "~2.3.1",
+    "mime-types": "^2.1.18"
   },
   "devDependencies": {
-    "queuelib": "^0.3.6",
-    "request": "~2.34.0",
-    "tape": "~2.10.2"
+    "queuelib": "^2.0.1",
+    "request": "~2.87.0",
+    "tape": "~4.9.0"
   },
   "scripts": {
     "test": "tape tests/*.js"
@@ -30,7 +31,7 @@
     "request"
   ],
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com>",
-  "license": "Apache2",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/mikeal/response/issues"
   },

@@ -1,5 +1,6 @@
 var stream = require('stream')
   , mime = require('mime')
+  , mimeTypes = require('mime-types')
   , util = require('util')
   , bl = require('bl')
   , caseless = require('caseless')
@@ -21,7 +22,7 @@ function mutations (src, dest) {
       dest.write('Not Found')
       dest.end()
     })
-    dest.setHeader('content-type', mime.lookup(src.path))
+    dest.setHeader('content-type', mime.getType(src.path))
   }
   if (src.statusCode) dest.statusCode = src.statusCode
 }
@@ -161,13 +162,13 @@ typemap['json'] = function(view) {
   return JSON.stringify(view)
 }
 
-Object.keys(mime.types).forEach(function (mimeName) {
+Object.keys(mimeTypes.types).forEach(function (mimeName) {
 
     // set mime convenience methods
   function _response (view, opts) {
     view = (typemap[mimeName]) ? typemap[mimeName](view) : view
     var r = response(view, opts)
-    r.setHeader('content-type', mime.types[mimeName])
+    r.setHeader('content-type', mimeTypes.types[mimeName])
     return r
   }
   response[mimeName] = _response
@@ -175,7 +176,7 @@ Object.keys(mime.types).forEach(function (mimeName) {
   Response.prototype[mimeName] = function (view) {
     view = (typemap[mimeName]) ? typemap[mimeName](view) : view
     var self = this
-    self.setHeader('content-type', mime.types[mimeName])
+    self.setHeader('content-type', mimeTypes.types[mimeName])
     process.nextTick(function () {
         self.end(view)
     })
