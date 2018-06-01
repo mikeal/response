@@ -31,6 +31,9 @@
     "request"
   ],
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com>",
+  "contributors": [
+    "Satana Charuwichitratana <micksatana@live.com>"
+  ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/mikeal/response/issues"
