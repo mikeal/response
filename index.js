@@ -1,5 +1,4 @@
 var stream = require('stream')
-  , mime = require('mime')
   , mimeTypes = require('mime-types')
   , util = require('util')
   , bl = require('bl')
@@ -22,7 +21,7 @@ function mutations (src, dest) {
       dest.write('Not Found')
       dest.end()
     })
-    dest.setHeader('content-type', mime.getType(src.path))
+    dest.setHeader('content-type', mimeTypes.lookup(src.path))
   }
   if (src.statusCode) dest.statusCode = src.statusCode
 }
